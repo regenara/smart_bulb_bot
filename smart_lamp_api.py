@@ -47,7 +47,8 @@ class SmartLampAPI:
                         continue
                     if response.status != 200:
                         self._logger.error('Unsuccessful request=%s response=%s', data, json)
-                        raise SmartLampAPIError(f'Error: {json.get("error") or json.get("message") or json}')
+                        state = json.get('state', {})
+                        raise SmartLampAPIError(f'{state.get("title") or "Error"}: {state.get("message") or json}')
                     self._logger.info('Successful request=%s response=%s', data, json)
                     return json
 
