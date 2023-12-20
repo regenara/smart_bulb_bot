@@ -61,7 +61,7 @@ class SmartLampAPI:
                 raise UnknownSmartLampAPIError('Unknown error')
 
     async def _set_jwt(self):
-        url = 'https://companionapp.online.sberbank.ru/v1/smarthome/token'
+        url = 'https://mp.aihome.dev/v11/smarthome/token'
         headers = {'Authorization': f'Bearer {self._smart_home_token}'}
         data = await self._send_request(url=url, method='GET', headers=headers)
         self._jwt_token = data['token']
