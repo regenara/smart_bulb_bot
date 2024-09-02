@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from json import loads
 from typing import Any
 
 from aiohttp import (ClientSession,
@@ -40,11 +41,12 @@ class SmartLampAPI:
             try:
                 headers_ = headers or {'x-auth-jwt': self._jwt_token}
                 async with self.session.request(method, url, json=data, headers=headers_) as response:
-                    json = await response.json()
+                    text = await response.text()
                     if response.status == 401:
-                        self._logger.error('Unauthorized, trying get jwt request=%s response=%s', data, json)
+                        self._logger.error('Unauthorized, trying get jwt request=%s response=%s', data, text)
                         await self._set_jwt()
                         continue
+                    json = loads(text)
                     if response.status != 200:
                         self._logger.error('Unsuccessful request=%s response=%s', data, json)
                         state = json.get('state', {})
