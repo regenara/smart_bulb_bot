@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from json import loads
+from json.decoder import JSONDecodeError
 from typing import Any
 
 from aiohttp import (ClientSession,
@@ -14,6 +15,10 @@ class SmartLampAPIError(Exception):
 
 
 class TimeoutSmartLampAPIError(SmartLampAPIError):
+    """"""
+
+
+class ClientConnectorSmartLampAPIError(SmartLampAPIError):
     """"""
 
 
@@ -50,9 +55,15 @@ class SmartLampAPI:
                     if response.status != 200:
                         self._logger.error('Unsuccessful request=%s response=%s', data, json)
                         state = json.get('state', {})
-                        raise SmartLampAPIError(f'{state.get("title") or "Error"}: {state.get("message") or json}')
+                        raise UnknownSmartLampAPIError(f'{state.get("title") or "Error"}: '
+                                                       f'{state.get("message") or json}')
                     self._logger.info('Successful request=%s response=%s', data, json)
                     return json
+
+            except JSONDecodeError:
+                self._logger.error('Unsuccessful request=%s status=%s reason=%s', data, response.status,
+                                   response.reason)
+                raise UnknownSmartLampAPIError(f'{response.status} {response.reason}')
 
             except asyncio.exceptions.TimeoutError:
                 self._logger.error('TimeoutSmartLampAPIError request=%s', data)
@@ -60,7 +71,7 @@ class SmartLampAPI:
 
             except ClientConnectorError:
                 self._logger.error('UnknownSmartLampAPIError request=%s', data)
-                raise UnknownSmartLampAPIError('Unknown error')
+                raise ClientConnectorSmartLampAPIError('Client connector error')
 
     async def _set_jwt(self):
         url = 'https://companion.devices.sberbank.ru/v13/smarthome/token'

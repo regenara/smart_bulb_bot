@@ -15,9 +15,7 @@ from keyboards import (get_colour_keyboard,
                        get_timer_keyboard,
                        get_white_keyboard)
 from config import Config
-from smart_lamp_api import (SmartLampAPIError,
-                            TimeoutSmartLampAPIError,
-                            UnknownSmartLampAPIError)
+from smart_lamp_api import SmartLampAPIError
 from texts import (get_colour_text,
                    get_timer_text,
                    get_time,
@@ -53,8 +51,8 @@ async def set_data(callback_query: types.CallbackQuery, value: str) -> tuple[str
             Config.states['mode'] = 'colour'
             text, keyboard = get_colour_data()
             await Config.smart_lamp_api.set_color(h=Config.states.h, s=Config.states.s, v=Config.states.v)
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
     return text, keyboard
 
 
@@ -63,8 +61,8 @@ async def main(message: types.Message):
     try:
         Config.states['on_off'] = (await Config.smart_lamp_api.get_states)['on_off']
         await message.answer(text=hbold('Выбери команду'), reply_markup=get_main_keyboard())
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await message.answer(text=e)
+    except SmartLampAPIError as e:
+        await message.answer(text=str(e))
 
 
 @dp.callback_query_handler(text='on_off', user_id=Config.env.bot_user_ids, state='ready')
@@ -77,8 +75,8 @@ async def on_off(callback_query: types.CallbackQuery, state: FSMContext):
         with suppress(MessageNotModified):
             await callback_query.message.edit_reply_markup(reply_markup=get_main_keyboard())
         await callback_query.answer()
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
     await state.set_state('ready')
 
 
@@ -92,8 +90,8 @@ async def scene(callback_query: types.CallbackQuery, state: FSMContext):
         with suppress(MessageNotModified):
             await callback_query.message.edit_reply_markup(reply_markup=get_main_keyboard())
         await callback_query.answer()
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
     await state.set_state('ready')
 
 
@@ -122,8 +120,8 @@ async def timer(callback_query: types.CallbackQuery):
         text, keyboard = get_timer_data()
         await callback_query.message.edit_text(text=text, reply_markup=keyboard)
         await callback_query.answer()
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
 
 
 @dp.callback_query_handler(text_startswith=['up_step', 'down_step'], user_id=Config.env.bot_user_ids, state='*')
@@ -181,8 +179,8 @@ async def confirm(callback_query: types.CallbackQuery, state: FSMContext):
         with suppress(MessageNotModified):
             await callback_query.message.edit_text(text=text, reply_markup=keyboard)
         await callback_query.answer()
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
     await state.set_state('ready')
 
 
@@ -192,8 +190,8 @@ async def back(callback_query: types.CallbackQuery):
         Config.states['on_off'] = (await Config.smart_lamp_api.get_states)['on_off']
         await callback_query.message.edit_text(text=hbold('Выбери команду'), reply_markup=get_main_keyboard())
         await callback_query.answer()
-    except (SmartLampAPIError, TimeoutSmartLampAPIError, UnknownSmartLampAPIError) as e:
-        await callback_query.answer(text=e, show_alert=True)
+    except SmartLampAPIError as e:
+        await callback_query.answer(text=str(e), show_alert=True)
 
 
 async def on_startup(_):
