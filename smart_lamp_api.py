@@ -14,6 +14,10 @@ class SmartLampAPIError(Exception):
     """"""
 
 
+class InvalidTokenSmartLampAPIError(SmartLampAPIError):
+    """"""
+
+
 class TimeoutSmartLampAPIError(SmartLampAPIError):
     """"""
 
@@ -31,6 +35,7 @@ class SmartLampAPI:
         self._smart_home_token: str = smart_home_token
         self._device_id: str = device_id
         self._jwt_token: str | None = None
+        self._jwt_attempts: int = -1
         self._logger = logging.getLogger('SmartLampAPI')
         self._logger.setLevel(logging.INFO)
 
@@ -39,10 +44,9 @@ class SmartLampAPI:
 
     async def _send_request(self, url: str = None, method: str = 'PUT', states: list[dict[str, Any]] = None,
                             headers: dict[str, Any] = None) -> dict[str, Any]:
-
         url = url or f'https://gateway.iot.sberdevices.ru/gateway/v1/devices/{self._device_id}/state'
         data = {'desired_state': states, 'device_id': self._device_id} if states else None
-        while True:
+        while self._jwt_attempts < 3:
             try:
                 headers_ = headers or {'x-auth-jwt': self._jwt_token}
                 async with self.session.request(method, url, json=data, headers=headers_) as response:
@@ -52,6 +56,7 @@ class SmartLampAPI:
                         await self._set_jwt()
                         continue
                     json = loads(text)
+                    self._jwt_attempts = 0
                     if response.status != 200:
                         self._logger.error('Unsuccessful request=%s response=%s', data, json)
                         state = json.get('state', {})
@@ -73,7 +78,11 @@ class SmartLampAPI:
                 self._logger.error('UnknownSmartLampAPIError request=%s', data)
                 raise ClientConnectorSmartLampAPIError('Client connector error')
 
+        self._logger.error('InvalidTokenSmartLampAPIError')
+        raise InvalidTokenSmartLampAPIError('Invalid token')
+
     async def _set_jwt(self):
+        self._jwt_attempts += 1
         url = 'https://companion.devices.sberbank.ru/v13/smarthome/token'
         headers = {'Authorization': f'Bearer {self._smart_home_token}'}
         data = await self._send_request(url=url, method='GET', headers=headers)
