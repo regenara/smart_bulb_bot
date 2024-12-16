@@ -75,7 +75,7 @@ class SmartLampAPI:
                 raise TimeoutSmartLampAPIError('Timeout error')
 
             except ClientConnectorError:
-                self._logger.error('UnknownSmartLampAPIError request=%s', data)
+                self._logger.error('ClientConnectorSmartLampAPIError request=%s', data)
                 raise ClientConnectorSmartLampAPIError('Client connector error')
 
         self._logger.error('InvalidTokenSmartLampAPIError')
