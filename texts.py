@@ -11,8 +11,8 @@ from config import Config
 
 def get_white_text() -> str:
     return f'{hbold("Выстави настройки")}\n' \
-           f'Яркость: {hcode(Config.states.brightness, "100", sep="/")}\n' \
-           f'Температура: {hcode(Config.states.temp, "100", sep="/")}\n' \
+           f'Яркость: {hcode(Config.states.bright_value_v2, "100", sep="/")}\n' \
+           f'Температура: {hcode(Config.states.temp_value_v2, "100", sep="/")}\n' \
            f'Шаг: {hcode(Config.states.step, "100", sep="/")}'
 
 
@@ -33,9 +33,10 @@ def get_timer_text() -> str:
         current = f'Таймер {"выключения" if not Config.states.on_off else "включения"} ' \
                   f'установлен на {hcode(Config.states.time)}'
     return f'{hbold("Выстави настройки и нажми кнопку", on_off, sep=" ")}\n' \
-           f'Минуты:  {hcode(f"{Config.states.timer}", "1440", sep="/")}\n' \
+           f'Минуты:  {hcode(f"{Config.states.sleep_timer}", "1440", sep="/")}\n' \
            f'Шаг:  {hcode(Config.states.step, "100", sep="/")}\n{current}'
 
 
 def get_time() -> str:
-    return (datetime.now(tz=timezone(Config.env.timezone)) + timedelta(minutes=Config.states.timer)).strftime('%H:%M')
+    return (datetime.now(tz=timezone(Config.env.timezone)) +
+            timedelta(minutes=Config.states.sleep_timer)).strftime('%H:%M')
