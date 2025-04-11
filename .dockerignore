@@ -2,3 +2,4 @@ venv/
 .idea/
 __pycache__
 .env
+sber_refresh_token

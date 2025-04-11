@@ -1,0 +1,18 @@
+stages:
+  - deploy
+
+deploy_memento_mori_bot:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "$(whoami)"
+    - cd projects/smart_bulb_bot
+    - git pull gitlab master
+    - docker compose stop smart_bulb_bot || true
+    - docker compose rm -f smart_bulb_bot || true
+    - docker compose up -d --build --remove-orphans smart_bulb_bot
+    - git push origin master
+  only:
+    refs:
+      - master

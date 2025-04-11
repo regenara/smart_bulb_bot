@@ -1,0 +1,9 @@
+services:
+  smart_bulb_bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_bulb_bot
+    restart: always
+    volumes:
+      - ./smart_bulb_bot/sber_refresh_token:/usr/src/app/sber_refresh_token
