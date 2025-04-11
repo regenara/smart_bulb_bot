@@ -8,6 +8,6 @@ services:
     volumes:
       - ./smart_bulb_bot/sber_refresh_token:/usr/src/app/sber_refresh_token
     environment:
-      BOT_TOKEN=${BOT_TOKEN}
-      BOT_USER_IDS=${BOT_USER_IDS}
-      DEVICE_ID=${DEVICE_ID}
+      BOT_TOKEN: "${BOT_TOKEN}"
+      BOT_USER_IDS: "${BOT_USER_IDS}"
+      DEVICE_ID: "${DEVICE_ID}"
