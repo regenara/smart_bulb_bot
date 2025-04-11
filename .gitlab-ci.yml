@@ -7,7 +7,7 @@ deploy_memento_mori_bot:
     GIT_STRATEGY: none
   script:
     - echo "$(whoami)"
-    - cd projects/smart_bulb_bot
+    - cd /home/mstoneho/projects/smart_bulb_bot
     - git pull gitlab master
     - docker compose stop smart_bulb_bot || true
     - docker compose rm -f smart_bulb_bot || true
