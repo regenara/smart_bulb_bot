@@ -1,7 +1,7 @@
 stages:
   - deploy
 
-deploy_memento_mori_bot:
+deploy_smart_bulb_bot:
   stage: deploy
   variables:
     GIT_STRATEGY: none
