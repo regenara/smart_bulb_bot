@@ -5,7 +5,7 @@ deploy_smart_bulb_bot:
   stage: deploy
   script:
     - docker compose build smart_bulb.bot
-    - docker compose up -d --force-recreate --no-deps smart_bulb.bot
+    - docker compose up -d --force-recreate --no-deps --remove-orphans smart_bulb.bot
   only:
     refs:
       - master
