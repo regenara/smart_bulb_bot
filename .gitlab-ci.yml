@@ -3,15 +3,9 @@ stages:
 
 deploy_smart_bulb_bot:
   stage: deploy
-  variables:
-    GIT_STRATEGY: none
   script:
-    - echo "$(whoami)"
-    - cd /home/mstoneho/projects/smart_bulb_bot
-    - git pull gitlab master
-    - docker compose build smart_bulb_bot
-    - docker compose up -d --force-recreate --no-deps smart_bulb_bot
-    - git push origin master
+    - docker compose build smart_bulb.bot
+    - docker compose up -d --force-recreate --no-deps smart_bulb.bot
   only:
     refs:
       - master
