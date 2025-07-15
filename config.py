@@ -20,7 +20,7 @@ class _Config:
     async def init(self):
         with open('sber_refresh_token') as f:
             refresh_token = f.read()
-        self.bulb_api = SberSmartBulbAPI(refresh_token=refresh_token)
+        self.bulb_api = SberSmartBulbAPI(refresh_token=refresh_token.strip())
 
     async def stop(self):
         await self.bulb_api.close()
