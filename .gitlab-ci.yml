@@ -6,7 +6,7 @@ deploy_smart_bulb_bot:
   script:
     - git pull origin master
     - docker compose build smart_bulb.bot
-    - docker compose up -d --force-recreate --no-deps smart_bulb.bot
+    - docker compose up --force-recreate --no-deps smart_bulb.bot
   only:
     refs:
       - master
