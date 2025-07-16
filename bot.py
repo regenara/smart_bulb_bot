@@ -247,6 +247,7 @@ async def on_startup(_):
     for user_id in Config.env.bot_user_ids:
         await dp.current_state(user=user_id).set_state('ready')
     await Config.init()
+
     if not Config.bulb_api.refresh_token:
         await dp.bot.send_message(chat_id=Config.env.bot_user_ids[0], text='Необходима авторизация',
                                   reply_markup=get_auth_keyboard())
