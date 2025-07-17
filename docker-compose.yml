@@ -5,5 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: smart_bulb.bot
     restart: always
+    volumes:
+      - ./sber_refresh_token:/usr/src/app/sber_refresh_token
     env_file:
       - .env
