@@ -4,7 +4,7 @@ stages:
 deploy_smart_bulb_bot:
   stage: deploy
   script:
-    - git pull origin master
+    - curl ifconfig.me
     - docker compose build smart_bulb.bot
     - docker compose up -d --force-recreate --no-deps smart_bulb.bot
   only:
