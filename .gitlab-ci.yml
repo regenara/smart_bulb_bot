@@ -4,7 +4,9 @@ stages:
 deploy_smart_bulb_bot:
   stage: deploy
   script:
-    - curl ifconfig.me
+    - echo "DOCKER_HOST = $DOCKER_HOST"
+    - docker context ls
+    - docker info | grep 'Name\|Server Version\|Docker Root Dir'
     - docker compose build smart_bulb.bot
     - docker compose up -d --force-recreate --no-deps smart_bulb.bot
   only:
