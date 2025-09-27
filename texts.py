@@ -17,13 +17,12 @@ def get_white_text() -> str:
 
 
 def get_colour_text() -> str:
-    url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HueScale.svg/1920px-HueScale.svg.png'
     return f'{hbold("Выстави настройки")}\n' \
            f'Тон: {hcode(Config.states.h, "360", sep="/")}\n' \
            f'Насыщенность: {hcode(Config.states.s, "100", sep="/")}\n' \
            f'Яркость: {hcode(Config.states.v, "100", sep="/")}\n' \
            f'Шаг: {hcode(Config.states.step, "100", sep="/")}' \
-           f'{hide_link(url)}'
+           f'{hide_link(Config.env.hsv_image_url)}'
 
 
 def get_timer_text() -> str:

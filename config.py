@@ -9,6 +9,10 @@ class Environment:
     bot_user_ids = [int(uid) for uid in os.getenv('BOT_USER_IDS').split(',')]
     device_id = os.getenv('DEVICE_ID')
     timezone = os.getenv('TIMEZONE', 'Europe/Moscow')
+    hsv_image_url = os.getenv(
+        'HSV_IMAGE_URL',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HueScale.svg/1920px-HueScale.svg.png'
+    )
 
 
 class _Config:
