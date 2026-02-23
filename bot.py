@@ -24,7 +24,7 @@ from texts import (get_colour_text,
                    get_white_text)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(name)s %(message)s', style='%')
-bot = Bot(token=Config.env.bot_token, parse_mode='HTML')
+bot = Bot(token=Config.env.bot_token, parse_mode='HTML', proxy=Config.env.proxy_url or None)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 

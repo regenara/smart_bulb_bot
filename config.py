@@ -13,6 +13,7 @@ class Environment:
         'HSV_IMAGE_URL',
         'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HueScale.svg/1920px-HueScale.svg.png'
     )
+    proxy_url = os.getenv('PROXY_URL')
 
 
 class _Config:
